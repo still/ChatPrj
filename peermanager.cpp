@@ -25,6 +25,9 @@ void PeerManager::broadcasterBroadcastReceived(quint64 peerId)
     {
         peerMap.insert(peerId, NULL);
         qDebug() << this << "new peer" << peerId;
+        QHostAddress address;
+        address.setAddress(peerId >> 16);
+        quint16 port = peerId;
     }
 }
 
