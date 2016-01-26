@@ -4,7 +4,7 @@
 ChatMainWindow::ChatMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ChatMainWindow)
-    , broadcaster(new Broadcaster(this))
+    , manager(new PeerManager(this))
 {
     ui->setupUi(this);
     setupUi();
@@ -30,7 +30,7 @@ void ChatMainWindow::settingsActionTriggered()
     {
         settings = dlg.getData();
         if(!settings.entry.ip().isNull()) {
-            broadcaster->start(settings.entry, 20200, 12345, 1000);
+            manager->start(settings.entry, 30400, 1000);
         }
     }
 }

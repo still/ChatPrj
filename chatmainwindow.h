@@ -7,7 +7,7 @@
 #include <QAction>
 #include <settingsdialog.h>
 #include <profiledialog.h>
-#include <broadcaster.h>
+#include <peermanager.h>
 
 namespace Ui {
 class ChatMainWindow;
@@ -69,7 +69,10 @@ private:
      */
     Profile profile;
 
-    Broadcaster* broadcaster;
+    /**
+     * @brief manager Управление соединениями
+     */
+    PeerManager* manager;
 };
 
 #endif // CHATMAINWINDOW_H
