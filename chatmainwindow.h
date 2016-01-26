@@ -7,6 +7,7 @@
 #include <QAction>
 #include <settingsdialog.h>
 #include <profiledialog.h>
+#include <broadcaster.h>
 
 namespace Ui {
 class ChatMainWindow;
@@ -67,6 +68,8 @@ private:
      * @brief profile Настройки профиля
      */
     Profile profile;
+
+    Broadcaster* broadcaster;
 };
 
 #endif // CHATMAINWINDOW_H

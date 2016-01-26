@@ -1,9 +1,10 @@
 #include "chatmainwindow.h"
 #include "ui_chatmainwindow.h"
 
-ChatMainWindow::ChatMainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::ChatMainWindow)
+ChatMainWindow::ChatMainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::ChatMainWindow)
+    , broadcaster(new Broadcaster(this))
 {
     ui->setupUi(this);
     setupUi();
@@ -28,8 +29,8 @@ void ChatMainWindow::settingsActionTriggered()
     if(dlg.exec())
     {
         settings = dlg.getData();
-        if(settings.entry.ip().isNull()) {
-            //интерфейс не выбран
+        if(!settings.entry.ip().isNull()) {
+            broadcaster->start(settings.entry, 20200, 12345, 1000);
         }
     }
 }

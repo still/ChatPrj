@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         chatmainwindow.cpp \
     settingsdialog.cpp \
-    profiledialog.cpp
+    profiledialog.cpp \
+    broadcaster.cpp
 
 HEADERS  += chatmainwindow.h \
     settingsdialog.h \
-    profiledialog.h
+    profiledialog.h \
+    broadcaster.h
 
 FORMS    += chatmainwindow.ui \
     settingsdialog.ui \
