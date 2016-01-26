@@ -5,6 +5,8 @@
 
 #include <QMainWindow>
 #include <QAction>
+#include <settingsdialog.h>
+#include <profiledialog.h>
 
 namespace Ui {
 class ChatMainWindow;
@@ -55,6 +57,16 @@ private:
      * @brief profileAction QAction для формы профиля
      */
     QAction* profileAction;
+
+    /**
+     * @brief settings Настройки приложения
+     */
+    Settings settings;
+
+    /**
+     * @brief profile Настройки профиля
+     */
+    Profile profile;
 };
 
 #endif // CHATMAINWINDOW_H

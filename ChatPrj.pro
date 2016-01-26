@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,11 +13,17 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        chatmainwindow.cpp
+        chatmainwindow.cpp \
+    settingsdialog.cpp \
+    profiledialog.cpp
 
-HEADERS  += chatmainwindow.h
+HEADERS  += chatmainwindow.h \
+    settingsdialog.h \
+    profiledialog.h
 
-FORMS    += chatmainwindow.ui
+FORMS    += chatmainwindow.ui \
+    settingsdialog.ui \
+    profiledialog.ui
 
 RESOURCES += \
     res.qrc

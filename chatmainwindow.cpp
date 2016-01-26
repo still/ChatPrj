@@ -7,6 +7,11 @@ ChatMainWindow::ChatMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setupUi();
+
+    //для начальной настройки чата
+    show();
+    settingsAction->trigger();
+    profileAction->trigger();
 }
 
 ChatMainWindow::~ChatMainWindow()
@@ -17,13 +22,28 @@ ChatMainWindow::~ChatMainWindow()
 void ChatMainWindow::settingsActionTriggered()
 {
     //отображение формы настроек, обработка формы
-    qDebug() << this << "settingsActionTriggered";
+//    qDebug() << this << "settingsActionTriggered";
+    SettingsDialog dlg;
+    dlg.setData(settings);
+    if(dlg.exec())
+    {
+        settings = dlg.getData();
+        if(settings.entry.ip().isNull()) {
+            //интерфейс не выбран
+        }
+    }
 }
 
 void ChatMainWindow::profileActionTriggered()
 {
     //отображение формы профиля, обработка формы
-    qDebug() << this << "profileActionTriggered";
+//    qDebug() << this << "profileActionTriggered";
+    ProfileDialog dlg;
+    dlg.setData(profile);
+    if(dlg.exec())
+    {
+        profile = dlg.getData();
+    }
 }
 
 void ChatMainWindow::messageBtnClicked()
