@@ -36,12 +36,17 @@ void Broadcaster::stop()
     socket->close();
 }
 
+void Broadcaster::setUsername(const QString &username)
+{
+    this->username = username;
+}
+
 void Broadcaster::timerTimeout()
 {
     //формируем широковещательный пакет
     QByteArray datagram;
     QDataStream dataStream(&datagram, QIODevice::WriteOnly);
-    dataStream << currentId;
+    dataStream << currentId << username << MSG_TICK;
 
     socket->writeDatagram(datagram, currentEntry.broadcast()
                           , broadcastPort);
@@ -53,9 +58,6 @@ void Broadcaster::socketReadyRead()
     {
         QByteArray datagram;
         datagram.resize(socket->pendingDatagramSize());
-        //размер датаграммы отличается от ожидаемого
-        if(datagram.size() != sizeof(quint64))
-            continue;
         //неудачное прочтение датаграммы
         if(socket->readDatagram(datagram.data(), datagram.size()) == -1)
             continue;
@@ -64,9 +66,20 @@ void Broadcaster::socketReadyRead()
         QDataStream dataStream(&datagram, QIODevice::ReadOnly);
         quint64 peerId;
         dataStream >> peerId;
-
         if(currentId != peerId)
-            emit broadcastReceived(peerId);
+        {
+            QString username;
+            int type;
+            dataStream >> username;
+            dataStream >> type;
+            switch (type) {
+            case MSG_TICK:
+                emit broadcastReceived(peerId, username);
+                break;
+            default:
+                break;
+            }
+        }
     }
 }
 

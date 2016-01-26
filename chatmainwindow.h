@@ -42,6 +42,8 @@ public slots:
      * @param index Индекс из peerList
      */
     void peerListRowChanged(int index);
+
+    void managerNewPeer(quint64 peerId, QString username);
 private:
     /**
      * @brief setupUi Настройка интерфейса

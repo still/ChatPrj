@@ -9,6 +9,8 @@ ChatMainWindow::ChatMainWindow(QWidget *parent)
     ui->setupUi(this);
     setupUi();
 
+    connect(manager, SIGNAL(newPeer(quint64,QString)), SLOT(managerNewPeer(quint64,QString)));
+
     //для начальной настройки чата
     show();
     settingsAction->trigger();
@@ -30,7 +32,9 @@ void ChatMainWindow::settingsActionTriggered()
     {
         settings = dlg.getData();
         if(!settings.entry.ip().isNull()) {
+            manager->stop();
             manager->start(settings.entry, 30400, 1000);
+//            ui->statusBar->showMessage(QString::number(manager->currentId()));
         }
     }
 }
@@ -44,6 +48,7 @@ void ChatMainWindow::profileActionTriggered()
     if(dlg.exec())
     {
         profile = dlg.getData();
+        manager->setUsername(profile.username);
     }
 }
 
@@ -57,6 +62,14 @@ void ChatMainWindow::peerListRowChanged(int index)
 {
     //отображение сообщений выбранного собеседника
     qDebug() << this << "peerListRowChanged" << index;
+}
+
+void ChatMainWindow::managerNewPeer(quint64 peerId, QString username)
+{
+    QString title = username.isEmpty() ? QString::number(peerId) : username;
+    QListWidgetItem* item = new QListWidgetItem(title, ui->peerList);
+    item->setData(Qt::UserRole, QVariant(peerId));
+    ui->peerList->addItem(item);
 }
 
 void ChatMainWindow::setupUi()

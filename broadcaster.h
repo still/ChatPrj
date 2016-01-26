@@ -7,6 +7,9 @@
 #include <QNetworkAddressEntry>
 #include <QDataStream>
 
+const int MSG_TICK      = 1;
+const int MSG_MESSAGE   = 2;
+
 /**
  * @brief The Broadcaster class Класс реализующий функционал обнаружения пиров
  */
@@ -20,8 +23,9 @@ signals:
     /**
      * @brief broadcastReceived Сигнал получения широковещательного сообщения
      * @param peerId Идентификатор пира
+     * @param peerId Имя пира
      */
-    void broadcastReceived(quint64 peerId);
+    void broadcastReceived(quint64 peerId, QString username);
 public slots:
     /**
      * @brief start Запуск широковещательных сообщений
@@ -37,6 +41,8 @@ public slots:
      * @brief stop Остановка широковещательных сообщений
      */
     void stop();
+
+    void setUsername(const QString& username);
 
 private slots:
     /**
@@ -72,6 +78,11 @@ private:
      * @brief currentId Идентификатор хостового пира (ip << 16) + порт сервера
      */
     quint64 currentId;
+
+    /**
+     * @brief username Nickname
+     */
+    QString username;
 };
 
 #endif // BROADCASTER_H
