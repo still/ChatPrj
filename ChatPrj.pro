@@ -18,3 +18,6 @@ SOURCES += main.cpp\
 HEADERS  += chatmainwindow.h
 
 FORMS    += chatmainwindow.ui
+
+RESOURCES += \
+    res.qrc
