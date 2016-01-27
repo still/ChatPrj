@@ -4,6 +4,11 @@
 #include <QTcpSocket>
 #include <QDataStream>
 
+enum ConnectionState {
+    WAIT,   //ожидание handshake
+    READY   //ожидание пакетов
+};
+
 /**
  * @brief The TcpConnection class Класс постоянного p2p соединения
  */
@@ -24,12 +29,16 @@ public:
      * @return Идентификатор
      */
     quint64 getCurrentId();
+
+    void sendUsername(const QString& username);
 signals:
     /**
      * @brief ready Соединение установлено, готово к использованию
      * @param peerId
      */
     void ready(quint64 peerId);
+
+    void usernameChanged(QString username);
 private slots:
     /**
      * @brief handshake Отсылка идентификатора
@@ -49,6 +58,20 @@ private:
      * @brief isHandhaked Флаг указывающий о отсылке идентификатора
      */
     bool isHandhaked;
+
+    /**
+     * @brief state Текущее состояние соединения
+     */
+    ConnectionState state;
+
+    /**
+     * @brief packetId Идентификатор ожидаемого пакета
+     */
+    quint16 packetId;
+    /**
+     * @brief packetSize Размер ожидаемого пакета
+     */
+    quint16 packetSize;
 };
 
 #endif // TCPCONNECTION_H

@@ -11,6 +11,8 @@ ChatMainWindow::ChatMainWindow(QWidget *parent)
 
     connect(manager, SIGNAL(peerToAdd(quint64)), SLOT(addPeer(quint64)));
     connect(manager, SIGNAL(peerToDelete(quint64)), SLOT(deletePeer(quint64)));
+    connect(manager, SIGNAL(usernameChanged(quint64,QString))
+            , SLOT(changePeerUsername(quint64,QString)));
 
     //для начальной настройки чата
     show();
@@ -46,7 +48,10 @@ void ChatMainWindow::profileActionTriggered()
     dlg.setData(profile);
     if(dlg.exec())
     {
+        Profile oldProfile = profile;
         profile = dlg.getData();
+        if(oldProfile.username != profile.username)
+            manager->sendUsername(profile.username);
     }
 }
 
@@ -68,20 +73,21 @@ void ChatMainWindow::addPeer(quint64 peerId)
                                                 , ui->peerList);
     item->setData(Qt::UserRole, QVariant(peerId));
     ui->peerList->addItem(item);
+    manager->sendUsername(profile.username, peerId);
 }
 
 void ChatMainWindow::deletePeer(quint64 peerId)
 {
-    for(int i = 0; i < ui->peerList->count(); i++)
-    {
+    int index = indexByPeerId(peerId);
+    if(index >= 0)
+        delete ui->peerList->item(index);
+}
 
-        if(ui->peerList->item(i)->data(Qt::UserRole).toULongLong() == peerId)
-        {
-            ui->peerList->removeItemWidget(ui->peerList->item(i));
-            break;
-        }
-    }
-
+void ChatMainWindow::changePeerUsername(quint64 peerId, QString username)
+{
+    int index = indexByPeerId(peerId);
+    if(index >= 0)
+        ui->peerList->item(index)->setText(username);
 }
 
 void ChatMainWindow::setupUi()
@@ -101,4 +107,12 @@ void ChatMainWindow::setupUi()
 
     //обработка выбора собеседника
     connect(ui->peerList, SIGNAL(currentRowChanged(int)), SLOT(peerListRowChanged(int)));
+}
+
+int ChatMainWindow::indexByPeerId(quint64 peerId)
+{
+    for(int i = 0; i < ui->peerList->count(); i++)
+        if(ui->peerList->item(i)->data(Qt::UserRole).toULongLong() == peerId)
+            return i;
+    return -1;
 }

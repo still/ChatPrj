@@ -14,6 +14,7 @@ class PeerManager : public QObject
     Q_OBJECT
 public:
     explicit PeerManager(QObject *parent = 0);
+    ~PeerManager();
 
 signals:
     /**
@@ -31,6 +32,12 @@ signals:
      * @param peerId Идентификатор пира
      */
     void peerToDelete(quint64 peerId);
+    /**
+     * @brief usernameChanged Сигнал изменения имени пира
+     * @param peerId Идентификатор пира
+     * @param username Новое имя
+     */
+    void usernameChanged(quint64 peerId, QString username);
 public slots:
     /**
      * @brief start Запуск tcp-сервера и широковещательных сообщений
@@ -43,6 +50,14 @@ public slots:
      * @brief stop Остановка tcp-сервера и широковещательных сообщений
      */
     void stop();
+
+    /**
+     * @brief sendUsername Отсылка имени текущего пира
+     * @param username Новое имя
+     * @param peerId Идентификатор пира, которому нужно отослать,
+     * 0 - всем пирам
+     */
+    void sendUsername(QString username, quint64 peerId = 0);
 
 private slots:
     /**
@@ -65,6 +80,12 @@ private slots:
      * @brief connectionDisconnected Удаление пира
      */
     void connectionDisconnected();
+
+    /**
+     * @brief changeUsername Обработчик изменения имени пира
+     * @param username Новое имя пира
+     */
+    void changeUsername(QString username);
 private:
     /**
      * @brief broadcaster Рассылка широковещательных пакетов

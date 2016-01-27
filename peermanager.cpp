@@ -15,6 +15,10 @@ PeerManager::PeerManager(QObject *parent)
             , SLOT(peerConnection(TcpConnection*)));
 }
 
+PeerManager::~PeerManager()
+{
+}
+
 void PeerManager::start(QNetworkAddressEntry entry, quint16 broadcastPrt
                         , int msec)
 {
@@ -26,6 +30,25 @@ void PeerManager::stop()
 {
     server->close();
     broadcaster->stop();
+}
+
+void PeerManager::sendUsername(QString username, quint64 peerId)
+{
+    if(username.isEmpty())
+        return;
+    if(peerId != 0)
+    {
+        if(peerMap.contains(peerId))
+        {
+            peerMap.value(peerId)->sendUsername(username);
+        }
+    }
+    else
+    {
+        QMap<quint64, TcpConnection*>::iterator i;
+        for (i = peerMap.begin(); i != peerMap.end(); ++i)
+            i.value()->sendUsername(username);
+    }
 }
 
 void PeerManager::broadcasterBroadcastReceived(quint64 peerId)
@@ -60,6 +83,8 @@ void PeerManager::connectionReady(quint64 peerId)
     else
     {
         peerMap.insert(peerId, connection);
+        connect(connection, SIGNAL(usernameChanged(QString))
+                , SLOT(changeUsername(QString)));
         emit peerToAdd(peerId);
     }
 }
@@ -73,4 +98,10 @@ void PeerManager::connectionDisconnected()
         emit peerToDelete(connection->getCurrentId());
     }
     connection->deleteLater();
+}
+
+void PeerManager::changeUsername(QString username)
+{
+    TcpConnection* connection = qobject_cast<TcpConnection*>(sender());
+    emit usernameChanged(connection->getCurrentId(), username);
 }

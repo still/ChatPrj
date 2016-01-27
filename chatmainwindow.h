@@ -8,6 +8,7 @@
 #include <settingsdialog.h>
 #include <profiledialog.h>
 #include <peermanager.h>
+#include <QStringListModel>
 
 namespace Ui {
 class ChatMainWindow;
@@ -54,12 +55,25 @@ public slots:
      * @param peerId Идентификатор пира
      */
     void deletePeer(quint64 peerId);
+
+    /**
+     * @brief changePeerUsername Изменение имени пира
+     * @param peerId Идентификатор пира
+     * @param username Новое имя
+     */
+    void changePeerUsername(quint64 peerId, QString username);
 private:
     /**
      * @brief setupUi Настройка интерфейса
      */
     void setupUi();
 
+    /**
+     * @brief indexByPeerId Поиск по идентификатору индекса в списке пиров
+     * @param peerId Идентификатор
+     * @return Индекс
+     */
+    int indexByPeerId(quint64 peerId);
 private:
     Ui::ChatMainWindow *ui;
     /**
@@ -85,6 +99,11 @@ private:
      * @brief manager Управление соединениями
      */
     PeerManager* manager;
+
+    /**
+     * @brief peerMessages Сообщения пиров
+     */
+    QMap<quint64, QStringListModel*> peerMessages;
 };
 
 #endif // CHATMAINWINDOW_H
