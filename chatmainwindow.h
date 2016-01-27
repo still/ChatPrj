@@ -9,6 +9,7 @@
 #include <profiledialog.h>
 #include <peermanager.h>
 #include <QStringListModel>
+#include <encryption.h>
 
 namespace Ui {
 class ChatMainWindow;

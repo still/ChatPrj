@@ -69,8 +69,8 @@ void ChatMainWindow::messageBtnClicked()
         ui->messageEdit->clear();
         quint64 peerId = ui->peerList->currentItem()->data(Qt::UserRole)
                 .toULongLong();
-        manager->sendMessage(message, peerId);
         appendMessage("You: " + message, peerId);
+        manager->sendMessage(encodeXOR(message, profile.key), peerId);
     }
 }
 
@@ -114,7 +114,8 @@ void ChatMainWindow::changePeerUsername(quint64 peerId, QString username)
 
 void ChatMainWindow::getPeerMessage(quint64 peerId, QString message)
 {
-    appendMessage(usenameByPeerId(peerId) + ": " + message, peerId);
+    appendMessage(usenameByPeerId(peerId) + ": " + decodeXOR(message, profile.key)
+                  , peerId);
 }
 
 void ChatMainWindow::setupUi()
@@ -149,6 +150,7 @@ QString ChatMainWindow::usenameByPeerId(quint64 peerId)
     int index = indexByPeerId(peerId);
     if(index >= 0)
         return ui->peerList->item(index)->text();
+    return QString();
 }
 
 void ChatMainWindow::enableMessaging(bool ison)

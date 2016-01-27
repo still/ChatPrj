@@ -27,7 +27,8 @@ HEADERS  += chatmainwindow.h \
     broadcaster.h \
     peermanager.h \
     tcpconnection.h \
-    tcpserver.h
+    tcpserver.h \
+    encryption.h
 
 FORMS    += chatmainwindow.ui \
     settingsdialog.ui \
