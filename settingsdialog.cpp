@@ -18,7 +18,10 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::setData(Settings &data)
 {
-    ui->interfaceCmb->setCurrentIndex(indexOfInterface(data.entry));
+    int index = indexOfInterface(data.entry);
+    if(index = -1 && entryList.size() > 0)
+        index = 0;
+    ui->interfaceCmb->setCurrentIndex(index);
 }
 
 Settings SettingsDialog::getData()

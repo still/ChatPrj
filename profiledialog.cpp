@@ -15,7 +15,8 @@ ProfileDialog::~ProfileDialog()
 
 void ProfileDialog::setData(Profile &data)
 {
-    ui->usernameEdit->setText(data.username);
+    ui->usernameEdit->setText(
+                data.username.isEmpty() ? "noname" : data.username);
     ui->keyEdit->setText(data.key);
 }
 

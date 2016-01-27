@@ -17,7 +17,6 @@ ChatMainWindow::ChatMainWindow(QWidget *parent)
             , SLOT(getPeerMessage(quint64,QString)));
 
     //для начальной настройки чата
-    enableMessaging(false);
     show();
     settingsAction->trigger();
     profileAction->trigger();
@@ -122,19 +121,28 @@ void ChatMainWindow::setupUi()
 {
     //создание QAction настроек
     settingsAction = new QAction(QIcon(":settings"), tr("Settings"), this);
-    connect(settingsAction, SIGNAL(triggered(bool)), SLOT(settingsActionTriggered()));
+    connect(settingsAction, SIGNAL(triggered(bool))
+            , SLOT(settingsActionTriggered()));
     ui->mainToolBar->addAction(settingsAction);
 
     //создание QAction профиля
     profileAction = new QAction(QIcon(":profile"), tr("Profile"), this);
-    connect(profileAction, SIGNAL(triggered(bool)), SLOT(profileActionTriggered()));
+    connect(profileAction, SIGNAL(triggered(bool))
+            , SLOT(profileActionTriggered()));
     ui->mainToolBar->addAction(profileAction);
 
     //обработка кнопки отсылки сообщения
-    connect(ui->messageButton, SIGNAL(clicked(bool)), SLOT(messageBtnClicked()));
+    connect(ui->messageButton, SIGNAL(clicked(bool))
+            , SLOT(messageBtnClicked()));
 
     //обработка выбора собеседника
-    connect(ui->peerList, SIGNAL(currentRowChanged(int)), SLOT(peerListRowChanged(int)));
+    connect(ui->peerList, SIGNAL(currentRowChanged(int))
+            , SLOT(peerListRowChanged(int)));
+
+    connect(ui->messageEdit, SIGNAL(returnPressed())
+            , SLOT(messageBtnClicked()));
+
+    enableMessaging(false);
 }
 
 int ChatMainWindow::indexByPeerId(quint64 peerId)
