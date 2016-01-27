@@ -10,6 +10,11 @@ Broadcaster::Broadcaster(QObject *parent)
     connect(socket, SIGNAL(readyRead()), SLOT(socketReadyRead()));
 }
 
+quint64 Broadcaster::getCurrentId()
+{
+    return currentId;
+}
+
 quint64 Broadcaster::start(QNetworkAddressEntry entry, quint16 broadcastPrt, quint16 serverPrt, int msec)
 {
     broadcastPort = broadcastPrt;

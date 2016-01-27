@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <QNetworkAddressEntry>
 #include <QDataStream>
+#include <tcpconnection.h>
 
 /**
  * @brief The Broadcaster class Класс реализующий функционал обнаружения пиров
@@ -15,6 +16,11 @@ class Broadcaster : public QObject
     Q_OBJECT
 public:
     explicit Broadcaster(QObject *parent = 0);
+    /**
+     * @brief getCurrentId Метод возвращающий текущий идентификатор
+     * @return Идентификатор
+     */
+    quint64 getCurrentId();
 
 signals:
     /**

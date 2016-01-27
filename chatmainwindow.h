@@ -42,6 +42,18 @@ public slots:
      * @param index Индекс из peerList
      */
     void peerListRowChanged(int index);
+
+    /**
+     * @brief addPeer Добавление нового пира в список пиров
+     * @param peerId Идентификатор пира
+     */
+    void addPeer(quint64 peerId);
+
+    /**
+     * @brief deletePeer Удаление пира из списка
+     * @param peerId Идентификатор пира
+     */
+    void deletePeer(quint64 peerId);
 private:
     /**
      * @brief setupUi Настройка интерфейса

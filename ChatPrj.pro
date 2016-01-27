@@ -17,13 +17,17 @@ SOURCES += main.cpp\
     settingsdialog.cpp \
     profiledialog.cpp \
     broadcaster.cpp \
-    peermanager.cpp
+    peermanager.cpp \
+    tcpconnection.cpp \
+    tcpserver.cpp
 
 HEADERS  += chatmainwindow.h \
     settingsdialog.h \
     profiledialog.h \
     broadcaster.h \
-    peermanager.h
+    peermanager.h \
+    tcpconnection.h \
+    tcpserver.h
 
 FORMS    += chatmainwindow.ui \
     settingsdialog.ui \
