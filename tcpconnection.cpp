@@ -31,7 +31,17 @@ void TcpConnection::sendUsername(const QString &username)
     packetStream << packetId << packetSize;
     packet.append(username);
     write(packet);
-    qDebug() << "write" << packet;
+}
+
+void TcpConnection::sendMessage(const QString &message)
+{
+    quint16 packetId = 2;
+    quint16 packetSize = (quint16)message.size();
+    QByteArray packet;
+    QDataStream packetStream(&packet, QIODevice::WriteOnly);
+    packetStream << packetId << packetSize;
+    packet.append(message);
+    write(packet);
 }
 
 void TcpConnection::handshake()
@@ -73,7 +83,6 @@ void TcpConnection::readyReadHandler()
                 QByteArray header = read(4);
                 QDataStream headerStream(&header, QIODevice::ReadOnly);
                 headerStream >> packetId >> packetSize;
-                qDebug() << "header" << packetId << packetSize;
             }
 
             if(bytesAvailable() < packetSize)
@@ -81,8 +90,10 @@ void TcpConnection::readyReadHandler()
             QByteArray body = read(packetSize);
             switch (packetId) {
             case 1:
-                QString username(body);
-                emit usernameChanged(username);
+                emit usernameChanged(QString(body));
+                break;
+            case 2:
+                emit messageGetted(QString(body));
                 break;
             }
             packetId = 0;

@@ -13,8 +13,11 @@ ChatMainWindow::ChatMainWindow(QWidget *parent)
     connect(manager, SIGNAL(peerToDelete(quint64)), SLOT(deletePeer(quint64)));
     connect(manager, SIGNAL(usernameChanged(quint64,QString))
             , SLOT(changePeerUsername(quint64,QString)));
+    connect(manager, SIGNAL(messageGetted(quint64,QString))
+            , SLOT(getPeerMessage(quint64,QString)));
 
     //для начальной настройки чата
+    enableMessaging(false);
     show();
     settingsAction->trigger();
     profileAction->trigger();
@@ -58,13 +61,29 @@ void ChatMainWindow::profileActionTriggered()
 void ChatMainWindow::messageBtnClicked()
 {
     //отсылка введенного сообщения
-    qDebug() << this << "messageBtnClicked";
+    if(ui->peerList->currentRow() >= 0)
+    {
+        QString message = ui->messageEdit->text();
+        if(message.trimmed().isEmpty())
+            return;
+        ui->messageEdit->clear();
+        quint64 peerId = ui->peerList->currentItem()->data(Qt::UserRole)
+                .toULongLong();
+        manager->sendMessage(message, peerId);
+        appendMessage("You: " + message, peerId);
+    }
 }
 
 void ChatMainWindow::peerListRowChanged(int index)
 {
     //отображение сообщений выбранного собеседника
-    qDebug() << this << "peerListRowChanged" << index;
+    enableMessaging(index >= -1);
+    if(index == -1)
+        ui->messageListView->setModel(NULL);
+    quint64 peerId = ui->peerList->item(index)->data(Qt::UserRole)
+            .toULongLong();
+    if(peerMessages.contains(peerId))
+        ui->messageListView->setModel(peerMessages.value(peerId));
 }
 
 void ChatMainWindow::addPeer(quint64 peerId)
@@ -73,6 +92,7 @@ void ChatMainWindow::addPeer(quint64 peerId)
                                                 , ui->peerList);
     item->setData(Qt::UserRole, QVariant(peerId));
     ui->peerList->addItem(item);
+    peerMessages.insert(peerId, new QStringListModel(this));
     manager->sendUsername(profile.username, peerId);
 }
 
@@ -81,6 +101,8 @@ void ChatMainWindow::deletePeer(quint64 peerId)
     int index = indexByPeerId(peerId);
     if(index >= 0)
         delete ui->peerList->item(index);
+    if(peerMessages.contains(peerId))
+        delete peerMessages.take(peerId);
 }
 
 void ChatMainWindow::changePeerUsername(quint64 peerId, QString username)
@@ -88,6 +110,11 @@ void ChatMainWindow::changePeerUsername(quint64 peerId, QString username)
     int index = indexByPeerId(peerId);
     if(index >= 0)
         ui->peerList->item(index)->setText(username);
+}
+
+void ChatMainWindow::getPeerMessage(quint64 peerId, QString message)
+{
+    appendMessage(usenameByPeerId(peerId) + ": " + message, peerId);
 }
 
 void ChatMainWindow::setupUi()
@@ -115,4 +142,28 @@ int ChatMainWindow::indexByPeerId(quint64 peerId)
         if(ui->peerList->item(i)->data(Qt::UserRole).toULongLong() == peerId)
             return i;
     return -1;
+}
+
+QString ChatMainWindow::usenameByPeerId(quint64 peerId)
+{
+    int index = indexByPeerId(peerId);
+    if(index >= 0)
+        return ui->peerList->item(index)->text();
+}
+
+void ChatMainWindow::enableMessaging(bool ison)
+{
+    ui->messageButton->setEnabled(ison);
+    ui->messageEdit->setEnabled(ison);
+    ui->messageListView->setEnabled(ison);
+}
+
+void ChatMainWindow::appendMessage(QString message, quint64 peerId)
+{
+    if(peerMessages.contains(peerId))
+    {
+        QStringListModel* model = peerMessages.value(peerId);
+        model->insertRow(model->rowCount());
+        model->setData(model->index(model->rowCount() - 1), message);
+    }
 }

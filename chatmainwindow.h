@@ -62,6 +62,13 @@ public slots:
      * @param username Новое имя
      */
     void changePeerUsername(quint64 peerId, QString username);
+
+    /**
+     * @brief getPeerMessage Добавление нового сообщения
+     * @param peerId Идентификатор пира
+     * @param message Текст сообщения
+     */
+    void getPeerMessage(quint64 peerId, QString message);
 private:
     /**
      * @brief setupUi Настройка интерфейса
@@ -74,6 +81,26 @@ private:
      * @return Индекс
      */
     int indexByPeerId(quint64 peerId);
+
+    /**
+     * @brief usenameByPeerId Получение имени по идентификатору пира
+     * @param peerId Идентификатор пира
+     * @return Имя пира
+     */
+    QString usenameByPeerId(quint64 peerId);
+
+    /**
+     * @brief enableMessaging Активирование гуя для отправки сообщиний
+     * @param ison Флаг активации
+     */
+    void enableMessaging(bool ison);
+
+    /**
+     * @brief appendMessage Добавление сообщения в конец модели
+     * @param message Сообщение
+     * @param peerId Идентификатор пира
+     */
+    void appendMessage(QString message, quint64 peerId);
 private:
     Ui::ChatMainWindow *ui;
     /**

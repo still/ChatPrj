@@ -20,10 +20,14 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QListView" name="messageListView"/>
+         <widget class="QListView" name="messageListView">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
@@ -45,7 +49,11 @@
         </item>
        </layout>
       </widget>
-      <widget class="QListWidget" name="peerList"/>
+      <widget class="QListWidget" name="peerList">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>

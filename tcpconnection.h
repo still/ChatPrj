@@ -30,7 +30,17 @@ public:
      */
     quint64 getCurrentId();
 
+    /**
+     * @brief sendUsername Отсылка имени текущего пира
+     * @param username Имя текущего пира
+     */
     void sendUsername(const QString& username);
+
+    /**
+     * @brief sendMessage Отсылка сообщения
+     * @param message Текст сообщения
+     */
+    void sendMessage(const QString& message);
 signals:
     /**
      * @brief ready Соединение установлено, готово к использованию
@@ -38,7 +48,17 @@ signals:
      */
     void ready(quint64 peerId);
 
+    /**
+     * @brief usernameChanged Сигнал об изменении имени пира
+     * @param username Имя пира
+     */
     void usernameChanged(QString username);
+
+    /**
+     * @brief messageGetted Сигнал о получении сообщения
+     * @param message Текст сообщения
+     */
+    void messageGetted(QString message);
 private slots:
     /**
      * @brief handshake Отсылка идентификатора

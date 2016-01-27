@@ -38,6 +38,13 @@ signals:
      * @param username Новое имя
      */
     void usernameChanged(quint64 peerId, QString username);
+
+    /**
+     * @brief messageGetted Сигнал получения нового сообщения
+     * @param peerId Идентификатор пира
+     * @param message Текст сообщения
+     */
+    void messageGetted(quint64 peerId, QString message);
 public slots:
     /**
      * @brief start Запуск tcp-сервера и широковещательных сообщений
@@ -59,6 +66,12 @@ public slots:
      */
     void sendUsername(QString username, quint64 peerId = 0);
 
+    /**
+     * @brief sendMessage Отсылка сообщения пиру
+     * @param message Текст сообщения
+     * @param peerId Идентификатор сообщения
+     */
+    void sendMessage(QString message, quint64 peerId);
 private slots:
     /**
      * @brief broadcasterBroadcastReceived Обработка широковещательного
@@ -86,6 +99,12 @@ private slots:
      * @param username Новое имя пира
      */
     void changeUsername(QString username);
+
+    /**
+     * @brief getMessage Обработчик получения сообщения
+     * @param message Текст сообщения
+     */
+    void getMessage(QString message);
 private:
     /**
      * @brief broadcaster Рассылка широковещательных пакетов

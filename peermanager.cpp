@@ -51,6 +51,12 @@ void PeerManager::sendUsername(QString username, quint64 peerId)
     }
 }
 
+void PeerManager::sendMessage(QString message, quint64 peerId)
+{
+    if(peerMap.contains(peerId))
+        peerMap.value(peerId)->sendMessage(message);
+}
+
 void PeerManager::broadcasterBroadcastReceived(quint64 peerId)
 {
     if(!peerMap.contains(peerId))
@@ -85,6 +91,8 @@ void PeerManager::connectionReady(quint64 peerId)
         peerMap.insert(peerId, connection);
         connect(connection, SIGNAL(usernameChanged(QString))
                 , SLOT(changeUsername(QString)));
+        connect(connection, SIGNAL(messageGetted(QString))
+                , SLOT(getMessage(QString)));
         emit peerToAdd(peerId);
     }
 }
@@ -104,4 +112,10 @@ void PeerManager::changeUsername(QString username)
 {
     TcpConnection* connection = qobject_cast<TcpConnection*>(sender());
     emit usernameChanged(connection->getCurrentId(), username);
+}
+
+void PeerManager::getMessage(QString message)
+{
+    TcpConnection* connection = qobject_cast<TcpConnection*>(sender());
+    emit messageGetted(connection->getCurrentId(), message);
 }
